@@ -3,7 +3,7 @@ from typing import List
 
 #Declaring variables for setup functions
 PROJECT_NAME="housing-predictor"
-VERSION="0.0.1"
+VERSION="0.0.3"
 AUTHOR="Pallavi Saxena"
 DESRCIPTION="This is a first Machine Learning Project"
 REQUIREMENT_FILE_NAME="requirements.txt"
@@ -32,7 +32,8 @@ name=PROJECT_NAME,
 version=VERSION,
 author=AUTHOR,
 description=DESRCIPTION,
-packages=find_packages(), 
+packages=find_packages(),   #return all the folders names having __init__.py inside it
 install_requires=get_requirements_list()
 )
+
 
