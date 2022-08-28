@@ -9,7 +9,7 @@ from housing.constant import *
 class Configuration:
 
     def __init__(self,
-        config_file_path:str =CONFIG_FILE_PATH,
+        config_file_path:str = CONFIG_FILE_PATH,
         current_time_stamp:str = CURRENT_TIME_STAMP
         ) -> None:
         try:
@@ -17,7 +17,7 @@ class Configuration:
             self.training_pipeline_config = self.get_training_pipeline_config()
             self.time_stamp = current_time_stamp
         except Exception as e:
-            raise HousingException(e,sys) from e
+            raise HousingException(e, sys) from e
 
     def get_data_ingestion_config(self) -> DataIngestionConfig:
         try:
@@ -61,7 +61,7 @@ class Configuration:
             logging.info(f"Data Ingestion config: {data_ingestion_config}")
             return data_ingestion_config
         except Exception as e:
-            raise HousingException(e,sys) from e
+            raise HousingException(e, sys) from e
 
     def get_data_validation_config(self) -> DataValidationConfig:
         pass
@@ -90,5 +90,5 @@ class Configuration:
             logging.info(f"Training pipleine config: {training_pipeline_config}")
             return training_pipeline_config
         except Exception as e:
-            raise HousingException(e,sys) from e
+            raise HousingException(e, sys) from e
 
