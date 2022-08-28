@@ -130,3 +130,5 @@ dmypy.json
 
 # Virtual env
 mlproj/
+
+housing/artifact/
