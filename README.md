@@ -114,3 +114,13 @@ Install ipykernel
 ```
 pip install ipykernel
 ```
+
+
+Data Drift
+https://evidentlyai.com/
+
+When dataset stats get change, it is called as data drift.
+
+```
+pip install evidently
+```
