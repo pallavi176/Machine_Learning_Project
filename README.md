@@ -124,3 +124,16 @@ When dataset stats get change, it is called as data drift.
 ```
 pip install evidently
 ```
+
+Model Trainer
+- loading transformed training and testing datset
+- reading model config file 
+- getting best model on training datset
+- evaluation models on both training & testing datset --> model object
+- loading preprocessing pbject
+- custom model object by combining both preprocessing obj and model obj
+- saving custom model object
+- return model_trainer_artifact
+
+
+

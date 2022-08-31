@@ -1,16 +1,16 @@
-from cmath import log
-import importlib
-from pyexpat import model
-import numpy as np
-import yaml
-from housing.exception import HousingException
 import os
 import sys
-
+import yaml
+import importlib
+import numpy as np
+from cmath import log
+from pyexpat import model
 from collections import namedtuple
 from typing import List
+from sklearn.metrics import r2_score, mean_squared_error
+from housing.exception import HousingException
 from housing.logger import logging
-from sklearn.metrics import r2_score,mean_squared_error
+
 GRID_SEARCH_KEY = 'grid_search'
 MODULE_KEY = 'module'
 CLASS_KEY = 'class'
@@ -38,13 +38,10 @@ MetricInfoArtifact = namedtuple("MetricInfoArtifact",
                                 ["model_name", "model_object", "train_rmse", "test_rmse", "train_accuracy",
                                  "test_accuracy", "model_accuracy", "index_number"])
 
-
-
-def evaluate_classification_model(model_list: list, X_train:np.ndarray, y_train:np.ndarray, X_test:np.ndarray, y_test:np.ndarray, base_accuracy:float=0.6)->MetricInfoArtifact:
+def evaluate_classification_model(model_list: list, X_train: np.ndarray, y_train: np.ndarray, X_test: np.ndarray, y_test: np.ndarray, base_accuracy: float=0.6) -> MetricInfoArtifact:
     pass
 
-
-def evaluate_regression_model(model_list: list, X_train:np.ndarray, y_train:np.ndarray, X_test:np.ndarray, y_test:np.ndarray, base_accuracy:float=0.6) -> MetricInfoArtifact:
+def evaluate_regression_model(model_list: list, X_train: np.ndarray, y_train: np.ndarray, X_test: np.ndarray, y_test: np.ndarray, base_accuracy: float = 0.6) -> MetricInfoArtifact:
     """
     Description:
     This function compare multiple regression model return best model
@@ -64,9 +61,7 @@ def evaluate_regression_model(model_list: list, X_train:np.ndarray, y_train:np.n
                                  "test_accuracy", "model_accuracy", "index_number"])
 
     """
-    try:
-        
-    
+    try:  
         index_number = 0
         metric_info_artifact = None
         for model in model_list:
@@ -99,19 +94,18 @@ def evaluate_regression_model(model_list: list, X_train:np.ndarray, y_train:np.n
             logging.info(f"Train root mean squared error: [{train_rmse}].")
             logging.info(f"Test root mean squared error: [{test_rmse}].")
 
-
             #if model accuracy is greater than base accuracy and train and test score is within certain thershold
             #we will accept that model as accepted model
             if model_accuracy >= base_accuracy and diff_test_train_acc < 0.05:
                 base_accuracy = model_accuracy
-                metric_info_artifact = MetricInfoArtifact(model_name=model_name,
-                                                        model_object=model,
-                                                        train_rmse=train_rmse,
-                                                        test_rmse=test_rmse,
-                                                        train_accuracy=train_acc,
-                                                        test_accuracy=test_acc,
-                                                        model_accuracy=model_accuracy,
-                                                        index_number=index_number)
+                metric_info_artifact = MetricInfoArtifact(model_name = model_name,
+                                                        model_object = model,
+                                                        train_rmse = train_rmse,
+                                                        test_rmse = test_rmse,
+                                                        train_accuracy = train_acc,
+                                                        test_accuracy = test_acc,
+                                                        model_accuracy = model_accuracy,
+                                                        index_number = index_number)
 
                 logging.info(f"Acceptable model found {metric_info_artifact}. ")
             index_number += 1
@@ -120,7 +114,6 @@ def evaluate_regression_model(model_list: list, X_train:np.ndarray, y_train:np.n
         return metric_info_artifact
     except Exception as e:
         raise HousingException(e, sys) from e
-
 
 def get_sample_model_config_yaml_file(export_dir: str):
     try:
@@ -132,7 +125,6 @@ def get_sample_model_config_yaml_file(export_dir: str):
                     "cv": 3,
                     "verbose": 1
                 }
-
             },
             MODEL_SELECTION_KEY: {
                 "module_0": {
@@ -145,7 +137,6 @@ def get_sample_model_config_yaml_file(export_dir: str):
                     SEARCH_PARAM_GRID_KEY: {
                         "param_name": ['param_value_1', 'param_value_2']
                     }
-
                 },
             }
         }
@@ -224,9 +215,8 @@ class ModelFactory:
         try:
             # instantiating GridSearchCV class
             
-           
-            grid_search_cv_ref = ModelFactory.class_for_name(module_name=self.grid_search_cv_module,
-                                                             class_name=self.grid_search_class_name
+            grid_search_cv_ref = ModelFactory.class_for_name(module_name = self.grid_search_cv_module,
+                                                             class_name = self.grid_search_class_name
                                                              )
 
             grid_search_cv = grid_search_cv_ref(estimator=initialized_model.model,
@@ -239,11 +229,11 @@ class ModelFactory:
             logging.info(message)
             grid_search_cv.fit(input_feature, output_feature)
             message = f'{">>"* 30} f"Training {type(initialized_model.model).__name__}" completed {"<<"*30}'
-            grid_searched_best_model = GridSearchedBestModel(model_serial_number=initialized_model.model_serial_number,
-                                                             model=initialized_model.model,
-                                                             best_model=grid_search_cv.best_estimator_,
-                                                             best_parameters=grid_search_cv.best_params_,
-                                                             best_score=grid_search_cv.best_score_
+            grid_searched_best_model = GridSearchedBestModel(model_serial_number = initialized_model.model_serial_number,
+                                                             model = initialized_model.model,
+                                                             best_model = grid_search_cv.best_estimator_,
+                                                             best_parameters = grid_search_cv.best_params_,
+                                                             best_score = grid_search_cv.best_score_
                                                              )
             
             return grid_searched_best_model
@@ -260,23 +250,23 @@ class ModelFactory:
             for model_serial_number in self.models_initialization_config.keys():
 
                 model_initialization_config = self.models_initialization_config[model_serial_number]
-                model_obj_ref = ModelFactory.class_for_name(module_name=model_initialization_config[MODULE_KEY],
-                                                            class_name=model_initialization_config[CLASS_KEY]
+                model_obj_ref = ModelFactory.class_for_name(module_name = model_initialization_config[MODULE_KEY],
+                                                            class_name = model_initialization_config[CLASS_KEY]
                                                             )
                 model = model_obj_ref()
                 
                 if PARAM_KEY in model_initialization_config:
                     model_obj_property_data = dict(model_initialization_config[PARAM_KEY])
-                    model = ModelFactory.update_property_of_class(instance_ref=model,
-                                                                  property_data=model_obj_property_data)
+                    model = ModelFactory.update_property_of_class(instance_ref = model,
+                                                                  property_data = model_obj_property_data)
 
                 param_grid_search = model_initialization_config[SEARCH_PARAM_GRID_KEY]
                 model_name = f"{model_initialization_config[MODULE_KEY]}.{model_initialization_config[CLASS_KEY]}"
 
-                model_initialization_config = InitializedModelDetail(model_serial_number=model_serial_number,
-                                                                     model=model,
-                                                                     param_grid_search=param_grid_search,
-                                                                     model_name=model_name
+                model_initialization_config = InitializedModelDetail(model_serial_number = model_serial_number,
+                                                                     model = model,
+                                                                     param_grid_search = param_grid_search,
+                                                                     model_name = model_name
                                                                      )
 
                 initialized_model_list.append(model_initialization_config)
@@ -300,9 +290,9 @@ class ModelFactory:
         return: Function will return a GridSearchOperation
         """
         try:
-            return self.execute_grid_search_operation(initialized_model=initialized_model,
-                                                      input_feature=input_feature,
-                                                      output_feature=output_feature)
+            return self.execute_grid_search_operation(initialized_model = initialized_model,
+                                                      input_feature = input_feature,
+                                                      output_feature = output_feature)
         except Exception as e:
             raise HousingException(e, sys) from e
 
@@ -315,9 +305,9 @@ class ModelFactory:
             self.grid_searched_best_model_list = []
             for initialized_model_list in initialized_model_list:
                 grid_searched_best_model = self.initiate_best_parameter_search_for_initialized_model(
-                    initialized_model=initialized_model_list,
-                    input_feature=input_feature,
-                    output_feature=output_feature
+                    initialized_model = initialized_model_list,
+                    input_feature = input_feature,
+                    output_feature = output_feature
                 )
                 self.grid_searched_best_model_list.append(grid_searched_best_model)
             return self.grid_searched_best_model_list
@@ -362,9 +352,9 @@ class ModelFactory:
             initialized_model_list = self.get_initialized_model_list()
             logging.info(f"Initialized model: {initialized_model_list}")
             grid_searched_best_model_list = self.initiate_best_parameter_search_for_initialized_models(
-                initialized_model_list=initialized_model_list,
-                input_feature=X,
-                output_feature=y
+                initialized_model_list = initialized_model_list,
+                input_feature = X,
+                output_feature = y
             )
             return ModelFactory.get_best_model_from_grid_searched_best_model_list(grid_searched_best_model_list,
                                                                                   base_accuracy=base_accuracy)
