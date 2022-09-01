@@ -1,11 +1,8 @@
 import os
 import sys
-
+import pandas as pd
 from housing.exception import HousingException
 from housing.utils.util import load_object
-
-import pandas as pd
-
 
 class HousingData:
 
@@ -59,7 +56,6 @@ class HousingData:
         except Exception as e:
             raise HousingException(e, sys)
 
-
 class HousingPredictor:
 
     def __init__(self, model_dir: str):
@@ -81,7 +77,7 @@ class HousingPredictor:
     def predict(self, X):
         try:
             model_path = self.get_latest_model_path()
-            model = load_object(file_path=model_path)
+            model = load_object(file_path = model_path)
             median_house_value = model.predict(X)
             return median_house_value
         except Exception as e:

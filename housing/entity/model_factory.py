@@ -167,13 +167,13 @@ class ModelFactory:
             raise HousingException(e, sys) from e
 
     @staticmethod
-    def update_property_of_class(instance_ref:object, property_data: dict):
+    def update_property_of_class(instance_ref: object, property_data: dict):
         try:
             if not isinstance(property_data, dict):
                 raise Exception("property_data parameter required to dictionary")
             print(property_data)
             for key, value in property_data.items():
-                logging.info(f"Executing:$ {str(instance_ref)}.{key}={value}")
+                logging.info(f"Executing:$ {str(instance_ref)}.{key} = {value}")
                 setattr(instance_ref, key, value)
             return instance_ref
         except Exception as e:
@@ -189,7 +189,7 @@ class ModelFactory:
             raise HousingException(e, sys) from e
 
     @staticmethod
-    def class_for_name(module_name:str, class_name:str):
+    def class_for_name(module_name: str, class_name: str):
         try:
             # load the module, will raise ImportError if module cannot be loaded
             module = importlib.import_module(module_name)
@@ -219,8 +219,8 @@ class ModelFactory:
                                                              class_name = self.grid_search_class_name
                                                              )
 
-            grid_search_cv = grid_search_cv_ref(estimator=initialized_model.model,
-                                                param_grid=initialized_model.param_grid_search)
+            grid_search_cv = grid_search_cv_ref(estimator = initialized_model.model,
+                                                param_grid = initialized_model.param_grid_search)
             grid_search_cv = ModelFactory.update_property_of_class(grid_search_cv,
                                                                    self.grid_search_property_data)
 
@@ -235,7 +235,6 @@ class ModelFactory:
                                                              best_parameters = grid_search_cv.best_params_,
                                                              best_score = grid_search_cv.best_score_
                                                              )
-            
             return grid_searched_best_model
         except Exception as e:
             raise HousingException(e, sys) from e
@@ -329,7 +328,7 @@ class ModelFactory:
 
     @staticmethod
     def get_best_model_from_grid_searched_best_model_list(grid_searched_best_model_list: List[GridSearchedBestModel],
-                                                          base_accuracy=0.6
+                                                          base_accuracy = 0.6
                                                           ) -> BestModel:
         try:
             best_model = None
@@ -346,7 +345,7 @@ class ModelFactory:
         except Exception as e:
             raise HousingException(e, sys) from e
 
-    def get_best_model(self, X, y,base_accuracy=0.6) -> BestModel:
+    def get_best_model(self, X, y, base_accuracy = 0.6) -> BestModel:
         try:
             logging.info("Started Initializing model from config file")
             initialized_model_list = self.get_initialized_model_list()
@@ -357,6 +356,7 @@ class ModelFactory:
                 output_feature = y
             )
             return ModelFactory.get_best_model_from_grid_searched_best_model_list(grid_searched_best_model_list,
-                                                                                  base_accuracy=base_accuracy)
+                                                                                  base_accuracy = base_accuracy)
         except Exception as e:
             raise HousingException(e, sys)
+
