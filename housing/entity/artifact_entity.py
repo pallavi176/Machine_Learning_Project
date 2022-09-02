@@ -18,3 +18,7 @@ ModelEvaluationArtifact = namedtuple("ModelEvaluationArtifact", ["is_model_accep
 
 ModelPusherArtifact = namedtuple("ModelPusherArtifact", ["is_model_pusher", "export_model_file_path"])
 
+Experiment = namedtuple("Experiment", ["experiment_id", "initialization_timestamp", "artifact_time_stamp",
+                                       "running_status", "start_time", "stop_time", "execution_time", "message",
+                                       "experiment_file_path", "accuracy", "is_model_accepted"])
+
