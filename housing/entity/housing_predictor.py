@@ -4,6 +4,7 @@ import pandas as pd
 from housing.exception import HousingException
 from housing.utils.util import load_object
 
+
 class HousingData:
 
     def __init__(self,
@@ -82,3 +83,4 @@ class HousingPredictor:
             return median_house_value
         except Exception as e:
             raise HousingException(e, sys) from e
+
